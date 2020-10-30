@@ -23,20 +23,15 @@ def read_word_list(fname):
         Dictionary with keys 'Prime' and 'Target'
         with lists containing associated words
     """
-    words = {}
+    words = {'Prime': [], 'Target': []}
     with open(fname, 'r') as f:
         for i, line in enumerate(f):
-            if i == 0:
-                # assumes 'Prime', 'Target'
-                pk, tk = line.strip('\n').split(',')
-                words[pk] = []
-                words[tk] = []
-            else:
+            if i != 0:
                 vals = line.strip('\n')
                 try:
                     p, t = vals.split(',')
-                    words[pk].append(p)
-                    words[tk].append(t)
+                    words['Prime'].append(p)
+                    words['Target'].append(t)
                 except IndexError:
                     print("Tried to split, wasn't having it.")
 

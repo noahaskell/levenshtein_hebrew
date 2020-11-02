@@ -1,4 +1,4 @@
 stimuli.csv
 *.xlsx
-surface_lexicon.csv
 __pycache__/*
+surface_base_lexicon.csv

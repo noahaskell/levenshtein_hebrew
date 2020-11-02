@@ -158,7 +158,7 @@ def line_format(oldN_tuple):
 
 if __name__ == "__main__":
     all_word_lists = ["concrete", "fillers", "nonwords"]
-    lex = "base"
+    lex = "surface"
     lexicon = read_lexicon(lex + "_lexicon.csv")
     N = 20
     for wl in all_word_lists:

@@ -60,6 +60,6 @@ def test_write_word_stats():
         for i, line in enumerate(f):
             string = line.strip('\n')
             if i == 0:
-                assert string == "word, old2"
+                assert string == "word, old2, type"
             else:
                 assert string == wrd[i-1] + ", " + str(1.5) + ", " + "prime"

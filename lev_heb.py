@@ -127,7 +127,7 @@ def write_word_stats(word_list, fname='oldN.csv'):
     fname : str
         filename for opening and writing word, oldN pairs
     """
-    headers = [word_list[0][0] + ", " + word_list[0][1] + "\n"]
+    headers = [line_format(word_list[0])]
     str_l = [line_format(x) for x in word_list[1:]]
     str_list = headers + str_l
     with open(fname, 'w') as f:
@@ -157,7 +157,7 @@ def line_format(oldN_tuple):
 
 
 if __name__ == "__main__":
-    all_word_lists = ["concrete"]  # ["stimuli", "fillers", "nonwords"]
+    all_word_lists = ["concrete", "fillers", "nonwords"]
     lex = "base"
     lexicon = read_lexicon(lex + "_lexicon.csv")
     N = 20

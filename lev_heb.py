@@ -38,7 +38,7 @@ def read_word_list(fname):
     return words
 
 
-def read_lexicon(fname):
+def read_lexicon(fname="base_lexicon.csv"):
     """
     Reads in lexicon of Hebrew word forms.
 
@@ -91,6 +91,31 @@ def calculate_oldN(targets, lexicon, N=20):
     return oldN_list
 
 
+def add_word_type(oldN_list, word_type):
+    """
+    Adds word type to list of tuples
+
+    Parameters
+    ----------
+    oldN_list : list of tuples
+        tuples contain word, oldN pairs, returned by calculate_oldN()
+    word_type : {'prime', 'target'}
+        string indicating which type of word each word is
+
+    Returns
+    -------
+    list of tuples
+        tuples contain word, oldN, type triplets
+    """
+    headers = oldN_list[0]
+    headers += ("type",)
+    new_list = [headers]
+    for wo in oldN_list[1:]:
+        wo += (word_type,)
+        new_list.append(wo)
+    return new_list
+
+
 def write_word_stats(word_list, fname='oldN.csv'):
     """
     Writes words and OLDN stats to csv
@@ -103,7 +128,44 @@ def write_word_stats(word_list, fname='oldN.csv'):
         filename for opening and writing word, oldN pairs
     """
     headers = [word_list[0][0] + ", " + word_list[0][1] + "\n"]
-    str_l = [x[0] + ", " + str(round(x[1], 3)) + "\n" for x in word_list[1:]]
+    str_l = [line_format(x) for x in word_list[1:]]
     str_list = headers + str_l
     with open(fname, 'w') as f:
         f.writelines(str_list)
+
+
+def line_format(oldN_tuple):
+    """
+    Formats tupes for writing
+
+    Parameters
+    ----------
+    oldN_tuple : tuple
+        contains word, oldN, type triplet
+
+    Returns
+    -------
+    str
+        formatted for writing to csv, ends with \n
+    """
+    ot = oldN_tuple
+    if isinstance(ot[1], str):
+        out = ", ".join(ot) + "\n"
+    elif isinstance(ot[1], float):
+        out = ot[0] + ", " + str(round(ot[1], 3)) + ", " + ot[2] + "\n"
+    return out
+
+
+if __name__ == "__main__":
+    all_word_lists = ["concrete"]  # ["stimuli", "fillers", "nonwords"]
+    lex = "base"
+    lexicon = read_lexicon(lex + "_lexicon.csv")
+    N = 20
+    for wl in all_word_lists:
+        word_dict = read_word_list(wl + '.csv')
+        for word_type, word_list in word_dict.items():
+            oldN_list = calculate_oldN(word_list, lexicon, N=N)
+            wot_list = add_word_type(oldN_list, word_type)
+            oldN = "OLD" + str(N)
+            out_fname = "_".join([wl, lex, oldN, word_type]) + ".csv"
+            write_word_stats(wot_list, fname=out_fname)

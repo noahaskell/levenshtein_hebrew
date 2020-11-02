@@ -78,7 +78,7 @@ def calculate_oldN(targets, lexicon, N=20):
     list
         list with tuple elements containing word-OLDN pairs
     """
-    oldN_list = []
+    oldN_list = [("word", "old" + str(N))]
     for word in targets:
         old_t = []
         for neighbor in lexicon:
@@ -89,3 +89,21 @@ def calculate_oldN(targets, lexicon, N=20):
         oldN = sum(closest)/N
         oldN_list.append((word, oldN))
     return oldN_list
+
+
+def write_word_stats(word_list, fname='oldN.csv'):
+    """
+    Writes words and OLDN stats to csv
+
+    Parameters
+    ----------
+    word_list : list of tuples
+        tuples contain word, OLDN pairs, returned by calculate_oldN()
+    fname : str
+        filename for opening and writing word, oldN pairs
+    """
+    headers = [word_list[0][0] + ", " + word_list[0][1] + "\n"]
+    str_l = [x[0] + ", " + str(round(x[1], 3)) + "\n" for x in word_list[1:]]
+    str_list = headers + str_l
+    with open(fname, 'w') as f:
+        f.writelines(str_list)

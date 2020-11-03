@@ -150,22 +150,23 @@ def line_format(oldN_tuple):
     """
     ot = oldN_tuple
     if isinstance(ot[1], str):
-        out = ", ".join(ot) + "\n"
+        out = ",".join(ot) + "\n"
     elif isinstance(ot[1], float):
-        out = ot[0] + ", " + str(round(ot[1], 3)) + ", " + ot[2] + "\n"
+        out = ot[0] + "," + str(round(ot[1], 3)) + "," + ot[2] + "\n"
     return out
 
 
 if __name__ == "__main__":
     all_word_lists = ["concrete", "fillers", "nonwords"]
-    lex = "surface"
-    lexicon = read_lexicon(lex + "_lexicon.csv")
+    lex = ["base", "surface"]
     N = 20
-    for wl in all_word_lists:
-        word_dict = read_word_list(wl + '.csv')
-        for word_type, word_list in word_dict.items():
-            oldN_list = calculate_oldN(word_list, lexicon, N=N)
-            wot_list = add_word_type(oldN_list, word_type)
-            oldN = "OLD" + str(N)
-            out_fname = "_".join([wl, lex, oldN, word_type]) + ".csv"
-            write_word_stats(wot_list, fname=out_fname)
+    for this_lex in lex:
+        lexicon = read_lexicon(this_lex + "_lexicon.csv")
+        for wl in all_word_lists:
+            word_dict = read_word_list(wl + '.csv')
+            for word_type, word_list in word_dict.items():
+                oldN_list = calculate_oldN(word_list, lexicon, N=N)
+                wot_list = add_word_type(oldN_list, word_type)
+                oldN = "OLD" + str(N)
+                out_fname = "_".join([wl, lex, oldN, word_type]) + ".csv"
+                write_word_stats(wot_list, fname=out_fname)

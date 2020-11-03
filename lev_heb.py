@@ -168,5 +168,5 @@ if __name__ == "__main__":
                 oldN_list = calculate_oldN(word_list, lexicon, N=N)
                 wot_list = add_word_type(oldN_list, word_type)
                 oldN = "OLD" + str(N)
-                out_fname = "_".join([wl, lex, oldN, word_type]) + ".csv"
+                out_fname = "_".join([wl, this_lex, oldN, word_type]) + ".csv"
                 write_word_stats(wot_list, fname=out_fname)

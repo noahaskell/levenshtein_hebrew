@@ -1,11 +1,5 @@
 import Levenshtein as lev
 
-# architecture notes
-# read in word list for which OLD20 stats are wanted
-# read in lexicon (surface only? base? both? input spec'd?
-# loop through words, calculate OLD20
-# write to output file
-
 
 def read_word_list(fname, cols=("Prime", "Target")):
     """
@@ -36,8 +30,6 @@ def read_word_list(fname, cols=("Prime", "Target")):
                 headers = vals.strip("\ufeff").split(',')
                 all_idx = list(range(len(headers)))
                 for c in cols:
-                    # == here probably causes problems with original files
-                    # since "Prime" shows up with some kind of encoding prefix
                     this_idx = [j for j, h in enumerate(headers) if c == h][0]
                     indices[c] = this_idx
                     all_idx.remove(this_idx)

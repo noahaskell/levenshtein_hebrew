@@ -7,7 +7,7 @@ import Levenshtein as lev
 # write to output file
 
 
-def read_word_list(fname):
+def read_word_list(fname, cols=("Prime", "Target")):
     """
     Reads in csv with Prime and Target Hebrew words
 
@@ -15,23 +15,37 @@ def read_word_list(fname):
     ----------
     fname : str
         filename containing word lists
-        Primes in first column, Targets in second column
+    cols : tuple
+        contains keys for output dict corresponding
+        to columns in input
 
     Returns
     -------
     dict
-        Dictionary with keys 'Prime' and 'Target'
+        Dictionary with keys specified by cols input
         with lists containing associated words
     """
-    words = {'Prime': [], 'Target': []}
+    words = {x: [] for x in cols}
+    indices = {x: [] for x in cols}
     with open(fname, 'r') as f:
         for i, line in enumerate(f):
-            if i != 0:
-                vals = line.strip('\n')
+            vals = line.strip('\n')
+            if i == 0:
+                headers = vals.split(',')
+                words['headers'] = headers
+                all_idx = list(range(len(headers)))
+                for c in cols:
+                    this_idx = [j for j, h in enumerate(headers) if c in h][0]
+                    indices[c] = this_idx
+                    all_idx.remove(this_idx)
+                words['other'] = []
+            else:
                 try:
-                    p, t = vals.split(',')
-                    words['Prime'].append(p)
-                    words['Target'].append(t)
+                    word_list = vals.split(',')
+                    for k in cols:
+                        words[k].append(word_list[indices[k]])
+                    ol = [w for j, w in enumerate(word_list) if j in all_idx]
+                    words['other'].append(ol)
                 except IndexError:
                     print("Tried to split, wasn't having it.")
 
@@ -157,13 +171,16 @@ def line_format(oldN_tuple):
 
 
 if __name__ == "__main__":
-    all_word_lists = ["concrete", "fillers", "nonwords"]
-    lex = ["base", "surface"]
+    # some word lists: ["concrete", "fillers", "nonwords"]
+    # columns: [("Prime", "Target")]*3
+    all_word_lists = ["Frostetal1997_roots"]
+    columns = [("Heb",)]
+    lex = ["surface"]  # ["base"]
     N = 20
     for this_lex in lex:
         lexicon = read_lexicon(this_lex + "_lexicon.csv")
-        for wl in all_word_lists:
-            word_dict = read_word_list(wl + '.csv')
+        for wl, cols in zip(all_word_lists, columns):
+            word_dict = read_word_list(wl + '.csv', cols=cols)
             for word_type, word_list in word_dict.items():
                 oldN_list = calculate_oldN(word_list, lexicon, N=N)
                 wot_list = add_word_type(oldN_list, word_type)

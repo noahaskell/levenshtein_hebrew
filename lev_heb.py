@@ -74,15 +74,17 @@ def read_lexicon(fname="base_lexicon.csv"):
     return words
 
 
-def calculate_oldN(targets, lexicon, N=20):
+def calculate_oldN(word_dict, cols, lexicon, N=20):
     """
     Calculates OLDN for the words in targets using the words in lexicon
     OLDN = mean orthographic Levenshtein distance for the N nearest neighbors
 
     Parameters
     ----------
-    targets : list
-        list of target words (strings) for with OLDN is desired
+    word_dict: dict
+        dictionary of the type returned by read_word_list()
+    cols : tuple or list
+        contains keys for accessing words lists for which OLDN stats are wanted
     lexicon : list
         list of words for which Levenshtein distance will be calculated
     N : int
@@ -90,20 +92,20 @@ def calculate_oldN(targets, lexicon, N=20):
 
     Returns
     -------
-    list
-        list with tuple elements containing word-OLDN pairs
+    word_dict : dict
+        internal word lists modified in place to include OLDN stats
     """
-    oldN_list = [("word", "old" + str(N))]
-    for word in targets:
-        old_t = []
-        for neighbor in lexicon:
-            ld = lev.distance(word, neighbor)
-            if ld != 0:
-                old_t.append(ld)
-        closest = sorted(old_t)[:N]
-        oldN = sum(closest)/N
-        oldN_list.append((word, oldN))
-    return oldN_list
+    for col in cols:
+        for idx, word in enumerate(word_dict[col]):
+            old_t = []
+            for neighbor in lexicon:
+                ld = lev.distance(word, neighbor)
+                if ld != 0:
+                    old_t.append(ld)
+            closest = sorted(old_t)[:N]
+            oldN = sum(closest)/N
+            word_dict[col][idx] = (word, oldN)
+    return word_dict
 
 
 def add_word_type(oldN_list, word_type):

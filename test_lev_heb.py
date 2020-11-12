@@ -22,13 +22,13 @@ def test_read_lexicon():
 def test_calculate_oldN():
     wrd = ['hey', 'man']
     lex = ['hex', 'ray', 'map', 'cab']
-    out = lh.calculate_oldN(wrd, lex, N=2)
-    assert out[0][0] == "word", "first header incorrect."
-    assert out[0][1] == "old2", "second header incorrect."
-    assert out[1][0] == wrd[0], "calculate_oldN didn't return correct words."
-    assert out[1][1] == 1.5, "OLD2 for 'hey' incorrect."
-    assert out[2][0] == wrd[1], "calculate_oldN didn't return correct words."
-    assert out[2][1] == 1.5, "OLD2 for 'man' incorrect."
+    wd = {'wrd': wrd.copy()}
+    out_dict = lh.calculate_oldN(wd, ("wrd",), lex, N=2)
+    out_list = out_dict["wrd"]
+    assert out_list[0][0] == wrd[0], "First word in list incorrect."
+    assert out_list[0][1] == 1.5, "OLD2 for 'hey' incorrect."
+    assert out_list[1][0] == wrd[1], "Second word in list incorrect."
+    assert out_list[1][1] == 1.5, "OLD2 for 'man' incorrect."
 
 
 def test_add_word_type():

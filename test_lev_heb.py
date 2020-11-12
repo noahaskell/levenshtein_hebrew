@@ -3,15 +3,14 @@ import lev_heb as lh
 
 def test_read_word_list():
     word_dict = lh.read_word_list('example_word_list.csv')
-    assert word_dict['headers'] == ['Prime', 'Target', 'Extra', 'Again'], \
-        "Headers incorrect"
     assert word_dict['Prime'][0] == 'העללה', 'First Prime incorrect.'
     assert word_dict['Prime'][-1] == 'כופתר', 'Last Prime incorrect.'
     assert word_dict['Target'][0] == 'עצמאות', 'First Target incorrect.'
     assert word_dict['Target'][-1] == 'השיט', 'Last Target incorrect.'
-    assert word_dict['other'][0][0] == 'this', 'First extra item incorrect.'
-    assert word_dict['other'][-1][0] == 'other', 'Last extra item incorrect.'
-    assert word_dict['other'][-1][1] == 'code', 'Last extra item incorrect.'
+    assert word_dict['other'][0][0] == 'Extra', 'First other item incorrect.'
+    assert word_dict['other'][0][1] == 'Again', 'First other item incorrect.'
+    assert word_dict['other'][-1][0] == 'other', 'Last other item incorrect.'
+    assert word_dict['other'][-1][1] == 'code', 'Last other item incorrect.'
 
 
 def test_read_lexicon():

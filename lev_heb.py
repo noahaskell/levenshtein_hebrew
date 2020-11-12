@@ -34,13 +34,12 @@ def read_word_list(fname, cols=("Prime", "Target")):
             vals = line.strip('\n')
             if i == 0:
                 headers = vals.split(',')
-                words['headers'] = headers
                 all_idx = list(range(len(headers)))
                 for c in cols:
                     this_idx = [j for j, h in enumerate(headers) if c in h][0]
                     indices[c] = this_idx
                     all_idx.remove(this_idx)
-                words['other'] = []
+                words['other'] = [[headers[j] for j in all_idx]]
             else:
                 try:
                     word_list = vals.split(',')

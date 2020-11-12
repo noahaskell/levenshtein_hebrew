@@ -31,22 +31,6 @@ def test_calculate_oldN():
     assert out_list[1][1] == 1.5, "OLD2 for 'man' incorrect."
 
 
-def test_add_word_type():
-    wrd = ['hey', 'man']
-    lex = ['hex', 'ray', 'map', 'cab']
-    out = lh.calculate_oldN(wrd, lex, N=2)
-    wot = lh.add_word_type(out, "prime")
-    assert wot[0][0] == "word", "incorrect first header"
-    assert wot[0][1] == "old2", "incorrect second header"
-    assert wot[0][2] == "type", "incorrect third header"
-    assert wot[1][0] == "hey", "incorrect first word"
-    assert wot[1][1] == 1.5, "incorrect first old2"
-    assert wot[1][2] == "prime", "incorrect first word type"
-    assert wot[2][0] == "man", "incorrect first word"
-    assert wot[2][1] == 1.5, "incorrect first old2"
-    assert wot[2][2] == "prime", "incorrect first word type"
-
-
 def test_line_format():
     test_tup = ("hey", 1.5, "prime")
     line = lh.line_format(test_tup)

@@ -108,31 +108,6 @@ def calculate_oldN(word_dict, cols, lexicon, N=20):
     return word_dict
 
 
-def add_word_type(oldN_list, word_type):
-    """
-    Adds word type to list of tuples
-
-    Parameters
-    ----------
-    oldN_list : list of tuples
-        tuples contain word, oldN pairs, returned by calculate_oldN()
-    word_type : {'prime', 'target'}
-        string indicating which type of word each word is
-
-    Returns
-    -------
-    list of tuples
-        tuples contain word, oldN, type triplets
-    """
-    headers = oldN_list[0]
-    headers += ("type",)
-    new_list = [headers]
-    for wo in oldN_list[1:]:
-        wo += (word_type,)
-        new_list.append(wo)
-    return new_list
-
-
 def write_word_stats(word_list, fname='oldN.csv'):
     """
     Writes words and OLDN stats to csv

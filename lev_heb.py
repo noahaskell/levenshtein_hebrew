@@ -33,10 +33,12 @@ def read_word_list(fname, cols=("Prime", "Target")):
         for i, line in enumerate(f):
             vals = line.strip('\n')
             if i == 0:
-                headers = vals.split(',')
+                headers = vals.strip("\ufeff").split(',')
                 all_idx = list(range(len(headers)))
                 for c in cols:
-                    this_idx = [j for j, h in enumerate(headers) if c in h][0]
+                    # == here probably causes problems with original files
+                    # since "Prime" shows up with some kind of encoding prefix
+                    this_idx = [j for j, h in enumerate(headers) if c == h][0]
                     indices[c] = this_idx
                     all_idx.remove(this_idx)
                 words['other'] = [[headers[j] for j in all_idx]]
@@ -115,7 +117,7 @@ def write_word_stats(word_dict, fname='oldN.csv'):
     Parameters
     ----------
     word_dict : dict
-        output from calculate_oldN() or read_word_list()
+        output from calculate_oldN()
     fname : str
         filename for opening and writing word, oldN pairs
     """
@@ -162,19 +164,19 @@ def line_format(out_tuple):
 
 
 if __name__ == "__main__":
-    # some word lists: ["concrete", "fillers", "nonwords"]
+    # some word lists: ["concrete", "fillers", "nonwords",
     # columns: [("Prime", "Target")]*3
-    all_word_lists = ["Frostetal1997_roots"]
-    columns = [("Heb",)]
+    # list      "Frostetal1997_roots"]
+    # col        ("Heb",)
+    all_word_lists = ["ShortNonwordsForReview_61"]
+    columns = [("nonroot",)]
     lex = ["surface"]  # ["base"]
     N = 20
     for this_lex in lex:
         lexicon = read_lexicon(this_lex + "_lexicon.csv")
         for wl, cols in zip(all_word_lists, columns):
             word_dict = read_word_list(wl + '.csv', cols=cols)
-            for word_type, word_list in word_dict.items():
-                oldN_list = calculate_oldN(word_list, lexicon, N=N)
-                wot_list = add_word_type(oldN_list, word_type)
-                oldN = "OLD" + str(N)
-                out_fname = "_".join([wl, this_lex, oldN, word_type]) + ".csv"
-                write_word_stats(wot_list, fname=out_fname)
+            oldN_dict = calculate_oldN(word_dict, cols, lexicon, N=N)
+            oldN = "OLD" + str(N)
+            out_fname = wl + "_" + oldN + ".csv"
+            write_word_stats(oldN_dict, fname=out_fname)

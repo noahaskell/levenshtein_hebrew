@@ -39,15 +39,22 @@ def test_line_format():
 
 def test_write_word_stats():
     wrd = ['hey', 'man']
+    non = ['woz', 'zow']
     lex = ['hex', 'ray', 'map', 'cab']
-    out = lh.calculate_oldN(wrd, lex, N=2)
-    wot = lh.add_word_type(out, "prime")
+    wd = {'wrd': wrd.copy(),
+          'non': non.copy(),
+          'other': [['g', 'h'], ['x', 'y'], ['w', 'z']]}
+    out_dict = lh.calculate_oldN(wd, ("wrd", "non"), lex, N=2)
     test_fname = 'test_old2.csv'
-    lh.write_word_stats(wot, fname=test_fname)
+    lh.write_word_stats(out_dict, fname=test_fname)
     with open(test_fname, 'r') as f:
         for i, line in enumerate(f):
             string = line.strip('\n')
             if i == 0:
-                assert string == "word, old2, type"
-            else:
-                assert string == wrd[i-1] + ", " + str(1.5) + ", " + "prime"
+                assert string == "wrd,wrd_oldN,non,non_oldN,g,h"
+            elif i == 1:
+                temp = [wrd[i-1], "1.5", non[i-1], "3.0", "x", "y"]
+                assert string == ",".join(temp)
+            elif i == 2:
+                temp = [wrd[i-1], "1.5", non[i-1], "3.0", "w", "z"]
+                assert string == ",".join(temp)

@@ -108,20 +108,36 @@ def calculate_oldN(word_dict, cols, lexicon, N=20):
     return word_dict
 
 
-def write_word_stats(word_list, fname='oldN.csv'):
+def write_word_stats(word_dict, fname='oldN.csv'):
     """
     Writes words and OLDN stats to csv
 
     Parameters
     ----------
-    word_list : list of tuples
-        tuples contain word, OLDN pairs, returned by calculate_oldN()
+    word_dict : dict
+        output from calculate_oldN() or read_word_list()
     fname : str
         filename for opening and writing word, oldN pairs
     """
-    headers = [line_format(word_list[0])]
-    str_l = [line_format(x) for x in word_list[1:]]
-    str_list = headers + str_l
+    head_t = list(word_dict.keys())
+    head_t.remove('other')
+    head_a = []
+    for h in head_t:
+        head_a.append(h)
+        head_a.append(h + '_oldN')
+    head_b = word_dict['other'][0]
+    headers = head_a + head_b
+    lenny = len(word_dict['other'])-1
+    str_list = [line_format(headers)]
+    for i in range(lenny):
+        str_t = []
+        for h in head_t:
+            tup_t = word_dict[h][i]
+            str_t.append(tup_t[0])
+            str_t.append(tup_t[1])
+        str_u = [x for x in word_dict['other'][i+1]]
+        str_l = str_t + str_u
+        str_list.append(line_format(str_l))
     with open(fname, 'w') as f:
         f.writelines(str_list)
 

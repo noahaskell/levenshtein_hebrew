@@ -51,7 +51,7 @@ def test_add_word_type():
 def test_line_format():
     test_tup = ("hey", 1.5, "prime")
     line = lh.line_format(test_tup)
-    assert line == "hey, 1.5, prime\n", "line incorrectly formatted"
+    assert line == "hey,1.5,prime\n", "line incorrectly formatted"
 
 
 def test_write_word_stats():

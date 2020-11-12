@@ -24,6 +24,8 @@ def read_word_list(fname, cols=("Prime", "Target")):
     dict
         Dictionary with keys specified by cols input
         with lists containing associated words
+        also 'headers' and 'other' keys for writing full results
+        to mimic original file with added OLDN column(s)
     """
     words = {x: [] for x in cols}
     indices = {x: [] for x in cols}
@@ -148,25 +150,22 @@ def write_word_stats(word_list, fname='oldN.csv'):
         f.writelines(str_list)
 
 
-def line_format(oldN_tuple):
+def line_format(out_tuple):
     """
-    Formats tupes for writing
+    Formats tuples for writing
 
     Parameters
     ----------
-    oldN_tuple : tuple
-        contains word, oldN, type triplet
+    out_tuple : tuple
+        contains original row info plus OLDN values
 
     Returns
     -------
     str
         formatted for writing to csv, ends with \n
     """
-    ot = oldN_tuple
-    if isinstance(ot[1], str):
-        out = ",".join(ot) + "\n"
-    elif isinstance(ot[1], float):
-        out = ot[0] + "," + str(round(ot[1], 3)) + "," + ot[2] + "\n"
+    ol = [o if isinstance(o, str) else str(round(o, 3)) for o in out_tuple]
+    out = ",".join(ol) + "\n"
     return out
 
 

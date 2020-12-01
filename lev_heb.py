@@ -160,8 +160,10 @@ if __name__ == "__main__":
     # columns: [("Prime", "Target")]*3
     # list      "Frostetal1997_roots"]
     # col        ("Heb",)
-    all_word_lists = ["ShortNonwordsForReview_61"]
-    columns = [("nonroot",)]
+    # all_word_lists = ["ShortNonwordsForReview_61"]
+    # columns = [("nonroot",)]
+    all_word_lists = ["NWs_old20_11-30-20"]
+    columns = [("Target",)]
     lex = ["surface"]  # ["base"]
     N = 20
     for this_lex in lex:
